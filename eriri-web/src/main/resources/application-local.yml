@@ -1,0 +1,62 @@
+server:
+  port: 1025
+
+spring:
+  # Logback
+  log:
+    file:
+      path: ./logs/${spring.application.name}/${spring.profiles.active} # 日志文件路径
+      maxKeep: 5  # 最大保留的文件个数
+  # REDIS
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    database: 5
+    password:
+    timeout: 2000
+    # 默认缓存过期时间（秒）
+    expireSeconds: 10800
+    pool:
+      max-idle: 8
+      min-idle: 0
+      max-active: 8
+      max-wait: -1
+  # MySQL
+  datasource:
+      url: jdbc:mysql://127.0.0.1:3306/db_katou?autoReconnect=true
+      username: root
+      password: root
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      #连接池的配置信息
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: true
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat,wall,log4j
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      cachePrepStmts: true  # 开启二级缓存
+      # Druid Login Params
+      loginUserName: admin
+      loginPassword: Hello@1234
+
+  #dateformat
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1024/eureka/
